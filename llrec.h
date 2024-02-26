@@ -83,8 +83,24 @@ Node* llfilter(Node* head, Comp pred)
     //*********************************************
     // Provide your implementation below
     //*********************************************
-
-
+    Node* nextAddress;
+    if (head != nullptr) 
+    {
+        nextAddress = llfilter(head->next, pred);
+    }
+    else {return head;}
+    
+    if (pred)
+    {
+        Node* returnee = head->next;
+        delete head;
+        return returnee;
+    }
+    else
+    {
+        head->next = nextAddress;
+        return head;
+    }
 }
 
 #endif
