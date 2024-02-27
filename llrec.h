@@ -92,9 +92,8 @@ Node* llfilter(Node* head, Comp pred)
     
     if (pred(head->val))
     {
-        Node* returnee = head->next;
         delete head;
-        return returnee;
+        return nextAddress;
     }
     else
     {
