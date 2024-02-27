@@ -88,6 +88,105 @@ Heap<T,PComparator>::~Heap()
 template <typename T, typename PComparator>
 void Heap<T,PComparator>::trickleUp(int loc)
 {
+  int parent = (loc - 1) / dim_;
+  while (parent >= 0 && compare_(items_[loc], items_[parent]))
+  {
+    std::swap(items_[parent], items_[loc]);
+    loc = parent;
+    parent = (loc - 1) / dim_;
+  }
+}
+
+template <typename T, typename PComparator>
+void Heap<T,PComparator>::heapify(int idx)
+{
+  if (isLeaf(idx)) return;
+  int valuedChild = getValuedChild(idx);
+  if (compare_(items_[valuedChild], items_[idx]))
+  {
+    std::swap(items_[idx], items_[valuedChild]);
+    heapify(valuedChild);
+  }
+}
+
+template <typename T, typename PComparator>
+bool Heap<T,PComparator>::isLeaf(int idx)
+{
+  return (idx * dim_ + 1 > size() - 1);
+}
+
+template <typename T, typename PComparator>
+int Heap<T,PComparator>::getValuedChild(int idx)
+{
+  int valuedChild = dim_ * idx + 1;
+  for (int i=2; i < dim_ + 1; ++i)
+  {
+    if ((dim_ * idx) + i > size() - 1) {break;} 
+    if (compare_(items_[(dim_ * idx) + i], items_[valuedChild])) 
+    {
+      valuedChild = (dim_ * idx) + i;
+    }
+  }
+  return valuedChild;
+}
+
+template <typename T, typename PComparator>
+size_t Heap<T,PComparator>::size() const
+{
+  return items_.size();
+}
+
+template <typename T, typename PComparator>
+bool Heap<T,PComparator>::empty() const
+{
+  return size() == 0;
+}
+
+template <typename T, typename PComparator>
+void Heap<T,PComparator>::push(const T& item)
+{
+  items_.push_back(item);
+  trickleUp(size() - 1);
+}
+
+// We will start top() for you to handle the case of 
+// calling top on an empty heap
+template <typename T, typename PComparator>
+T const & Heap<T,PComparator>::top() const
+{
+  // Here we use exceptions to handle the case of trying
+  // to access the top element of an empty heap
+  if(empty()){
+    // ================================
+    // throw the appropriate exception
+    // ================================
+    throw std::underflow_error("UNDER");
+  }
+  // If we get here we know the heap has at least 1 item
+  // Add code to return the top element
+  return items_[0];
+}
+
+
+// We will start pop() for you to handle the case of 
+// calling top on an empty heap
+template <typename T, typename PComparator>
+void Heap<T,PComparator>::pop()
+{
+  if(empty()){
+    // ================================
+    // throw the appropriate exception
+    // ================================
+    throw std::underflow_error("UNDER");
+  }
+  items_[0] = items_.back();
+  items_.pop_back();
+  if (size() != 0) {heapify(0);}
+}
+
+/*template <typename T, typename PComparator>
+void Heap<T,PComparator>::trickleUp(int loc)
+{
   int parent = loc / dim_;
   while (parent >= 1 && compare_(items_[loc], items_[parent]))
   {
@@ -184,6 +283,6 @@ void Heap<T,PComparator>::pop()
   items_[1] = items_.back();
   items_.pop_back();
   heapify(1);
-}
+}*/
 
 #endif
