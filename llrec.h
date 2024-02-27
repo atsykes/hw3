@@ -90,6 +90,7 @@ Node* llfilter(Node* head, Comp pred)
     }
     else {return head;}
     
+    // Testing if the node will be filtered out
     if (pred(head->val))
     {
         delete head;

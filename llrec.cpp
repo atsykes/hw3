@@ -12,6 +12,8 @@ void llpivot(Node*& head, Node*& smaller, Node*& larger, int pivot)
         larger = nullptr;
         return;
     }
+
+    // Changing "next addresses" to point to the node
     llpivot(head->next, smaller, larger, pivot);
     if (head->val <= pivot)
     {

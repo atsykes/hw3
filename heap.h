@@ -61,11 +61,16 @@ public:
   size_t size() const;
 
 private:
-  /// Add whatever helper functions and data members you need below
+  // Compares a recently added node to it's parents and swaps them according to the comparison
   void trickleUp(int idx);
+  // Take a the top node and swaps it with it's more valued children
   void heapify(int idx);
+  // Checks whether a node is a leaf or not
   bool isLeaf(int idx);
+  // Gets the most valued child from a given parent index
   int getValuedChild(int idx);
+
+  // Members used to store, and compare necessary aspects of the heap
   std::vector<T> items_;
   int dim_;
   PComparator compare_;
@@ -118,7 +123,10 @@ bool Heap<T,PComparator>::isLeaf(int idx)
 template <typename T, typename PComparator>
 int Heap<T,PComparator>::getValuedChild(int idx)
 {
+  // Finding the left-most child
   int valuedChild = dim_ * idx + 1;
+
+  // For every existing child, find the minimum
   for (int i=2; i < dim_ + 1; ++i)
   {
     if ((dim_ * idx) + i > size() - 1) {break;} 
@@ -183,106 +191,5 @@ void Heap<T,PComparator>::pop()
   items_.pop_back();
   if (size() != 0) {heapify(0);}
 }
-
-/*template <typename T, typename PComparator>
-void Heap<T,PComparator>::trickleUp(int loc)
-{
-  int parent = loc / dim_;
-  while (parent >= 1 && compare_(items_[loc], items_[parent]))
-  {
-    std::swap(items_[parent], items_[loc]);
-    loc = parent;
-    parent = loc / dim_;
-  }
-}
-
-template <typename T, typename PComparator>
-void Heap<T,PComparator>::heapify(int idx)
-{
-  if (isLeaf(idx)) return;
-  int valuedChild = getValuedChild(idx);
-  if (compare_(items_[valuedChild], items_[idx]))
-  {
-    std::swap(items_[idx], items_[valuedChild]);
-    heapify(valuedChild);
-  }
-}
-
-template <typename T, typename PComparator>
-bool Heap<T,PComparator>::isLeaf(int idx)
-{
-  return (idx * dim_ > size());
-}
-
-template <typename T, typename PComparator>
-int Heap<T,PComparator>::getValuedChild(int idx)
-{
-  int valuedChild = dim_ * idx;
-  for (int i=1; i < dim_; ++i)
-  {
-    if ((dim_ * idx) + i > size()) {break;} 
-    if (compare_(items_[(dim_ * idx) + i], items_[valuedChild])) 
-    {
-      valuedChild = (dim_ * idx) + i;
-    }
-  }
-  return valuedChild;
-}
-
-template <typename T, typename PComparator>
-size_t Heap<T,PComparator>::size() const
-{
-  if (items_.size() == 0) {return 0;}
-  return items_.size() - 1;
-}
-
-template <typename T, typename PComparator>
-bool Heap<T,PComparator>::empty() const
-{
-  return (items_.size() <= 1);
-}
-
-template <typename T, typename PComparator>
-void Heap<T,PComparator>::push(const T& item)
-{
-  if (empty()) {items_.push_back(item);}
-  items_.push_back(item);
-  trickleUp(size());
-}
-
-// We will start top() for you to handle the case of 
-// calling top on an empty heap
-template <typename T, typename PComparator>
-T const & Heap<T,PComparator>::top() const
-{
-  // Here we use exceptions to handle the case of trying
-  // to access the top element of an empty heap
-  if(empty()){
-    // ================================
-    // throw the appropriate exception
-    // ================================
-    throw std::underflow_error("UNDER");
-  }
-  // If we get here we know the heap has at least 1 item
-  // Add code to return the top element
-  return items_[1];
-}
-
-
-// We will start pop() for you to handle the case of 
-// calling top on an empty heap
-template <typename T, typename PComparator>
-void Heap<T,PComparator>::pop()
-{
-  if(empty()){
-    // ================================
-    // throw the appropriate exception
-    // ================================
-    throw std::underflow_error("UNDER");
-  }
-  items_[1] = items_.back();
-  items_.pop_back();
-  heapify(1);
-}*/
 
 #endif
